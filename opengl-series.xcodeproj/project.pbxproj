@@ -129,6 +129,8 @@
 		E29C2ADF19FCA23100A6FCD2 /* platform_osx.mm in Sources */ = {isa = PBXBuildFile; fileRef = E29C2AC819FCA1A100A6FCD2 /* platform_osx.mm */; };
 		E29C2AE019FCA23100A6FCD2 /* platform_osx.mm in Sources */ = {isa = PBXBuildFile; fileRef = E29C2AC819FCA1A100A6FCD2 /* platform_osx.mm */; };
 		E29C2AE119FCA23200A6FCD2 /* platform_osx.mm in Sources */ = {isa = PBXBuildFile; fileRef = E29C2AC819FCA1A100A6FCD2 /* platform_osx.mm */; };
+		FA59FCF41D3F7C3C006C61FA /* container.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FA59FCF31D3F7C3C006C61FA /* container.jpg */; };
+		FA59FCF51D3F7C3C006C61FA /* container.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FA59FCF31D3F7C3C006C61FA /* container.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -249,6 +251,7 @@
 		E29C2AC719FCA1A100A6FCD2 /* libglfw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglfw3.a; path = platforms/osx/libglfw3.a; sourceTree = "<group>"; };
 		E29C2AC819FCA1A100A6FCD2 /* platform_osx.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = platform_osx.mm; path = platforms/osx/platform_osx.mm; sourceTree = "<group>"; };
 		E29C2AC919FCA1C400A6FCD2 /* glew.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = glew.c; path = source/common/thirdparty/glew/src/glew.c; sourceTree = "<group>"; };
+		FA59FCF31D3F7C3C006C61FA /* container.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = container.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -426,6 +429,7 @@
 		E2639B11190D179B00B6251A /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				FA59FCF31D3F7C3C006C61FA /* container.jpg */,
 				E2639B12190D179B00B6251A /* fragment-shader.txt */,
 				E2639B13190D179B00B6251A /* hazard.png */,
 				E2639B14190D179B00B6251A /* vertex-shader.txt */,
@@ -924,6 +928,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E2639B08190D174200B6251A /* vertex-shader.txt in Resources */,
+				FA59FCF41D3F7C3C006C61FA /* container.jpg in Resources */,
 				E2639B00190D174200B6251A /* fragment-shader.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -935,6 +940,7 @@
 				E2639B22190D179B00B6251A /* vertex-shader.txt in Resources */,
 				E2639B20190D179B00B6251A /* fragment-shader.txt in Resources */,
 				E2639B21190D179B00B6251A /* hazard.png in Resources */,
+				FA59FCF51D3F7C3C006C61FA /* container.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

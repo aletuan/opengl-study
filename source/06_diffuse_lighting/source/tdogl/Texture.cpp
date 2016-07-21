@@ -36,12 +36,21 @@ Texture::Texture(const Bitmap& bitmap, GLint minMagFiler, GLint wrapMode) :
     _originalWidth((GLfloat)bitmap.width()),
     _originalHeight((GLfloat)bitmap.height())
 {
+    // Step 1: Define a texture with an ID
     glGenTextures(1, &_object);
+    
+    // Step 2: Binding created texture with sub sequence command
     glBindTexture(GL_TEXTURE_2D, _object);
+    
+    // Step 3: Applying filter
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minMagFiler);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, minMagFiler);
+    
+    // Step 4: Applying wrapping mode
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapMode);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapMode);
+    
+    // Step 5: When texture is bound and configure, we can generate with glTextImage2D
     glTexImage2D(GL_TEXTURE_2D,
                  0, 
                  TextureFormatForBitmapFormat(bitmap.format()),
@@ -51,6 +60,8 @@ Texture::Texture(const Bitmap& bitmap, GLint minMagFiler, GLint wrapMode) :
                  TextureFormatForBitmapFormat(bitmap.format()), 
                  GL_UNSIGNED_BYTE, 
                  bitmap.pixelBuffer());
+    
+    // Step 6: After done, we need to free memory and unbind texture object
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 

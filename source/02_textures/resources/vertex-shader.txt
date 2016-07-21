@@ -1,13 +1,17 @@
-#version 150
+#version 330 core
 
-in vec3 vert;
-in vec2 vertTexCoord;
+layout (location = 0) in vec3 position;     // position variable has attribute position 0
+layout (location = 1) in vec3 color;        // color variable has attribute position 1
+layout (location = 2) in vec2 texCoord;     // texture coordination
 
-out vec2 fragTexCoord;
+out vec3 ourColor;                          // output a color to the fragment shader
+out vec2 TexCoord;
+
+// Apply transform to GLSL
+uniform mat4 transform;
 
 void main() {
-    // Pass the tex coord straight through to the fragment shader
-    fragTexCoord = vertTexCoord;
-    
-    gl_Position = vec4(vert, 1);
+    gl_Position = transform * vec4(position, 1.0);
+    ourColor    = color;
+    TexCoord    = texCoord;
 }

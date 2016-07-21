@@ -21,7 +21,11 @@
 // third-party libraries
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+
+// include GLM (OpenGL Mathematics)
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 // standard C++ libraries
 #include <cassert>
@@ -64,21 +68,36 @@ static void LoadTriangle() {
     glBindBuffer(GL_ARRAY_BUFFER, gVBO);
     
     // Put the three triangle vertices (XYZ) and texture coordinates (UV) into the VBO
+    /*
     GLfloat vertexData[] = {
         //  X     Y     Z       U     V
          0.0f, 0.8f, 0.0f,   0.5f, 1.0f,
         -0.8f,-0.8f, 0.0f,   0.0f, 0.0f,
          0.8f,-0.8f, 0.0f,   1.0f, 0.0f,
     };
+    */
+    
+    GLfloat vertexData[] = {
+        // Positions         // Colors         // Texture Coords
+        -0.5f,  -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+         0.5f,  -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+         0.0f,   0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+    };
+    
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
 
-    // connect the xyz to the "vert" attribute of the vertex shader
-    glEnableVertexAttribArray(gProgram->attrib("vert"));
-    glVertexAttribPointer(gProgram->attrib("vert"), 3, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), NULL);
-        
-    // connect the uv coords to the "vertTexCoord" attribute of the vertex shader
-    glEnableVertexAttribArray(gProgram->attrib("vertTexCoord"));
-    glVertexAttribPointer(gProgram->attrib("vertTexCoord"), 2, GL_FLOAT, GL_TRUE,  5*sizeof(GLfloat), (const GLvoid*)(3 * sizeof(GLfloat)));
+    
+    // Link vertex attribute for position
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
+    glEnableVertexAttribArray(0);
+    
+    // Link vertex attribute for color
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+    glEnableVertexAttribArray(1);
+    
+    // Link vertex attribute for color
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
+    glEnableVertexAttribArray(2);
 
     // unbind the VAO
     glBindVertexArray(0);
@@ -86,9 +105,10 @@ static void LoadTriangle() {
 
 
 // loads the file "hazard.png" into gTexture
-static void LoadTexture() {
-    tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile(ResourcePath("hazard.png"));
-    bmp.flipVertically();
+static void LoadTexture(std::string image) {
+    //tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile(ResourcePath("container.jpg"));
+    tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile(ResourcePath(image));
+    //bmp.flipVertically();
     gTexture = new tdogl::Texture(bmp);
 }
 
@@ -96,7 +116,7 @@ static void LoadTexture() {
 // draws a single frame
 static void Render() {
     // clear everything
-    glClearColor(0, 0, 0, 1); // black
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     
     // bind the program (the shaders)
@@ -105,7 +125,7 @@ static void Render() {
     // bind the texture and set the "tex" uniform in the fragment shader
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, gTexture->object());
-    gProgram->setUniform("tex", 0); //set to 0 because the texture is bound to GL_TEXTURE0
+    gProgram->setUniform("ourTexture1", 0); //set to 0 because the texture is bound to GL_TEXTURE0
 
     // bind the VAO (the triangle)
     glBindVertexArray(gVAO);
@@ -169,7 +189,7 @@ void AppMain() {
     LoadShaders();
 
     // load the texture
-    LoadTexture();
+    LoadTexture("container.jpg");
 
     // create buffer and fill it with the points of the triangle
     LoadTriangle();
@@ -191,6 +211,30 @@ void AppMain() {
 int main(int argc, char *argv[]) {
     try {
         AppMain();
+        
+        // trying some basic knowldege of transformation
+        // translate a vector of (1,0,0) by (1,1,0)
+        /*
+        glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
+        glm::mat4 trans;
+        
+        trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
+        std::cout << "Original vector" << std::endl;
+        std::cout << vec.x << vec.y << vec.z << std::endl;
+        vec = trans * vec;
+        std::cout << "Result by translation with (1,1,0)" << std::endl;
+        std::cout << vec.x << vec.y << vec.z << std::endl;
+        
+        glm::mat4 trans2;
+        // rotate around z axis
+        trans2 = glm::rotate(trans2, 90.0f, glm::vec3(0.0, 0.0, 1.0));
+        // scale up 0.5
+        trans2 = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
+        vec = trans2 * vec;
+        std::cout << "Result by rotate 90 degree and scale up 2 times" << std::endl;
+        std::cout << vec.x << vec.y << vec.z << std::endl;
+        */
+        
     } catch (const std::exception& e){
         std::cerr << "ERROR: " << e.what() << std::endl;
         return EXIT_FAILURE;
