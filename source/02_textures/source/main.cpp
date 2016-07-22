@@ -48,6 +48,12 @@ GLuint gVAO = 0;
 GLuint gVBO = 0;
 GLuint gEBO = 0;
 
+// move transform matrix to global since it should define in load function and replay in render iteration
+glm::mat4 gModel;
+glm::mat4 gView;
+glm::mat4 gProjection;
+
+
 
 // loads the vertex shader and fragment shader, and links them to make the global gProgram
 static void LoadShaders() {
@@ -59,20 +65,28 @@ static void LoadShaders() {
 
 
 // loads a triangle into the VAO global
-static void LoadTriangle() {
+static void LoadRectangle() {
     
     GLfloat vertices[] = {
         // Positions          // Colors           // Texture Coords
-        0.5f,  0.5f, 0.0f,    1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // Top Right
-        0.5f, -0.5f, 0.0f,    0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // Bottom Right
-        -0.5f, -0.5f, 0.0f,    0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // Bottom Left
-        -0.5f,  0.5f, 0.0f,    1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // Top Left
+        0.5f,  0.5f, 0.0f,    1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // Top Right
+        0.5f, -0.5f, 0.0f,    0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // Bottom Right
+       -0.5f, -0.5f, 0.0f,    0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // Bottom Left
+       -0.5f,  0.5f, 0.0f,    1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // Top Left
     };
+    
     
     GLuint indieces[] = {
         0,  1,  3,
         1,  2,  3
     };
+    
+    // define model matrix to transform all object's vertices to global world space
+    gModel = glm::rotate(gModel, -10.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+    // move slightly backward in the scene so that object's visible
+    gView = glm::translate(gView, glm::vec3(0.0f, 0.0f, -3.0f));
+    // define the projection matrix
+    gProjection = glm::perspective(45.0f, (GLfloat)SCREEN_SIZE.x / (GLfloat)SCREEN_SIZE.y, 0.1f, 100.0f);
     
     // make and bind the VAO
     glGenVertexArrays(1, &gVAO);
@@ -142,6 +156,11 @@ static void Render() {
     glBindTexture(GL_TEXTURE_2D, gTexture->object());
     gProgram->setUniform("ourTexture1", 0); //set to 0 because the texture is bound to GL_TEXTURE0
     
+    // send the transform matrix to the vertex sharder
+    gProgram->setUniform("model", gModel, GL_FALSE);
+    gProgram->setUniform("view", gView, GL_FALSE);
+    gProgram->setUniform("projection", gProjection, GL_FALSE);
+    
     // draw container
     glBindVertexArray(gVAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -206,7 +225,7 @@ void AppMain() {
     LoadTexture("container.jpg");
 
     // create buffer and fill it with the points of the triangle
-    LoadTriangle();
+    LoadRectangle();
 
     // run while the window is open
     while(!glfwWindowShouldClose(gWindow)){
@@ -225,29 +244,7 @@ void AppMain() {
 int main(int argc, char *argv[]) {
     try {
         AppMain();
-        
-        // trying some basic knowldege of transformation
-        // translate a vector of (1,0,0) by (1,1,0)
-        /*
-        glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
-        glm::mat4 trans;
-        
-        trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
-        std::cout << "Original vector" << std::endl;
-        std::cout << vec.x << vec.y << vec.z << std::endl;
-        vec = trans * vec;
-        std::cout << "Result by translation with (1,1,0)" << std::endl;
-        std::cout << vec.x << vec.y << vec.z << std::endl;
-        
-        glm::mat4 trans2;
-        // rotate around z axis
-        trans2 = glm::rotate(trans2, 90.0f, glm::vec3(0.0, 0.0, 1.0));
-        // scale up 0.5
-        trans2 = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
-        vec = trans2 * vec;
-        std::cout << "Result by rotate 90 degree and scale up 2 times" << std::endl;
-        std::cout << vec.x << vec.y << vec.z << std::endl;
-        */
+
         
     } catch (const std::exception& e){
         std::cerr << "ERROR: " << e.what() << std::endl;
