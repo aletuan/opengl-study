@@ -46,7 +46,7 @@ tdogl::Texture* gTexture = NULL;
 tdogl::Program* gProgram = NULL;
 GLuint gVAO = 0;
 GLuint gVBO = 0;
-GLuint gEBO = 0;
+//GLuint gEBO = 0;
 
 // move transform matrix to global since it should define in load function and replay in render iteration
 glm::mat4 gModel;
@@ -65,20 +65,50 @@ static void LoadShaders() {
 
 
 // loads a triangle into the VAO global
-static void LoadRectangle() {
+static void LoadRectangle() {   
     
     GLfloat vertices[] = {
-        // Positions          // Texture Coords
-        0.5f,  0.5f, 0.0f,    1.0f, 1.0f,   // Top Right
-        0.5f, -0.5f, 0.0f,    1.0f, 0.0f,   // Bottom Right
-       -0.5f, -0.5f, 0.0f,    0.0f, 0.0f,   // Bottom Left
-       -0.5f,  0.5f, 0.0f,    0.0f, 1.0f    // Top Left
-    };
-    
-    
-    GLuint indieces[] = {
-        0,  1,  3,
-        1,  2,  3
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+        0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+        
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        
+        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
     };
     
     // define model matrix to transform all object's vertices to global world space
@@ -95,15 +125,7 @@ static void LoadRectangle() {
     // make and bind the VBO
     glGenBuffers(1, &gVBO);
     glBindBuffer(GL_ARRAY_BUFFER, gVBO);
-    
-    // make and bind the EBO
-    glGenBuffers(1, &gEBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gEBO);
-    
-    
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indieces), indieces, GL_STATIC_DRAW);
-
     
     // Link vertex attribute for position
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
@@ -147,7 +169,7 @@ static void Render() {
     
     // draw container
     glBindVertexArray(gVAO);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
     glBindVertexArray(0);
     
     glBindTexture(GL_TEXTURE_2D, 0);
