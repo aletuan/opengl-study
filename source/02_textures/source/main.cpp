@@ -53,7 +53,18 @@ glm::mat4 gModel;
 glm::mat4 gView;
 glm::mat4 gProjection;
 
-
+glm::vec3 gCubePositions[] = {
+    glm::vec3( 0.0f,  0.0f,  0.0f),
+    glm::vec3( 2.0f,  5.0f, -15.0f),
+    glm::vec3(-1.5f, -2.2f, -2.5f),
+    glm::vec3(-3.8f, -2.0f, -12.3f),
+    glm::vec3( 2.4f, -0.4f, -3.5f),
+    glm::vec3(-1.7f,  3.0f, -7.5f),
+    glm::vec3( 1.3f, -2.0f, -2.5f),
+    glm::vec3( 1.5f,  2.0f, -2.5f),
+    glm::vec3( 1.5f,  0.2f, -1.5f),
+    glm::vec3(-1.3f,  1.0f, -1.5f)
+};
 
 // loads the vertex shader and fragment shader, and links them to make the global gProgram
 static void LoadShaders() {
@@ -173,8 +184,17 @@ static void Render() {
     
     // draw container
     glBindVertexArray(gVAO);
-    glDrawArrays(GL_TRIANGLES, 0, 36);
+    for (int i = 0; i < 10; i++) {
+        glm::mat4 model;
+        model = glm::translate(model, gCubePositions[i]);
+        GLfloat angle = 20.0f * i;
+        model = glm::rotate(model, angle, glm::vec3(1.0f, 0.3f, 0.5f));
+        gProgram->setUniform("model", model, GL_FALSE);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+    }
+    
     glBindVertexArray(0);
+    
     
     glBindTexture(GL_TEXTURE_2D, 0);
     
