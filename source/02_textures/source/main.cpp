@@ -46,6 +46,7 @@ tdogl::Texture* gTexture = NULL;
 tdogl::Program* gProgram = NULL;
 GLuint gVAO = 0;
 GLuint gVBO = 0;
+GLuint gEBO = 0;
 
 
 // loads the vertex shader and fragment shader, and links them to make the global gProgram
@@ -59,6 +60,20 @@ static void LoadShaders() {
 
 // loads a triangle into the VAO global
 static void LoadTriangle() {
+    
+    GLfloat vertices[] = {
+        // Positions          // Colors           // Texture Coords
+        0.5f,  0.5f, 0.0f,    1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // Top Right
+        0.5f, -0.5f, 0.0f,    0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // Bottom Right
+        -0.5f, -0.5f, 0.0f,    0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // Bottom Left
+        -0.5f,  0.5f, 0.0f,    1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // Top Left
+    };
+    
+    GLuint indieces[] = {
+        0,  1,  3,
+        1,  2,  3
+    };
+    
     // make and bind the VAO
     glGenVertexArrays(1, &gVAO);
     glBindVertexArray(gVAO);
@@ -67,24 +82,13 @@ static void LoadTriangle() {
     glGenBuffers(1, &gVBO);
     glBindBuffer(GL_ARRAY_BUFFER, gVBO);
     
-    // Put the three triangle vertices (XYZ) and texture coordinates (UV) into the VBO
-    /*
-    GLfloat vertexData[] = {
-        //  X     Y     Z       U     V
-         0.0f, 0.8f, 0.0f,   0.5f, 1.0f,
-        -0.8f,-0.8f, 0.0f,   0.0f, 0.0f,
-         0.8f,-0.8f, 0.0f,   1.0f, 0.0f,
-    };
-    */
+    // make and bind the EBO
+    glGenBuffers(1, &gEBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gEBO);
     
-    GLfloat vertexData[] = {
-        // Positions         // Colors         // Texture Coords
-        -0.5f,  -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-         0.5f,  -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-         0.0f,   0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-    };
     
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indieces), indieces, GL_STATIC_DRAW);
 
     
     // Link vertex attribute for position
@@ -138,15 +142,14 @@ static void Render() {
     glBindTexture(GL_TEXTURE_2D, gTexture->object());
     gProgram->setUniform("ourTexture1", 0); //set to 0 because the texture is bound to GL_TEXTURE0
     
-    // bind the VAO (the triangle)
+    // draw container
     glBindVertexArray(gVAO);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
     
-    // draw the VAO
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glBindTexture(GL_TEXTURE_2D, 0);
     
     // unbind the VAO, the program and the texture
-    glBindVertexArray(0);
-    glBindTexture(GL_TEXTURE_2D, 0);
     gProgram->stopUsing();
     
     // swap the display buffers (displays what was just drawn)
