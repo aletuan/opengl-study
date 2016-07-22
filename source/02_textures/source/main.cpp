@@ -68,11 +68,11 @@ static void LoadShaders() {
 static void LoadRectangle() {
     
     GLfloat vertices[] = {
-        // Positions          // Colors           // Texture Coords
-        0.5f,  0.5f, 0.0f,    1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // Top Right
-        0.5f, -0.5f, 0.0f,    0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // Bottom Right
-       -0.5f, -0.5f, 0.0f,    0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // Bottom Left
-       -0.5f,  0.5f, 0.0f,    1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // Top Left
+        // Positions          // Texture Coords
+        0.5f,  0.5f, 0.0f,    1.0f, 1.0f,   // Top Right
+        0.5f, -0.5f, 0.0f,    1.0f, 0.0f,   // Bottom Right
+       -0.5f, -0.5f, 0.0f,    0.0f, 0.0f,   // Bottom Left
+       -0.5f,  0.5f, 0.0f,    0.0f, 1.0f    // Top Left
     };
     
     
@@ -106,15 +106,11 @@ static void LoadRectangle() {
 
     
     // Link vertex attribute for position
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
     glEnableVertexAttribArray(0);
     
     // Link vertex attribute for color
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-    glEnableVertexAttribArray(1);
-    
-    // Link vertex attribute for color
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
     glEnableVertexAttribArray(2);
 
     // unbind the VAO
@@ -124,7 +120,6 @@ static void LoadRectangle() {
 
 // loads the file "hazard.png" into gTexture
 static void LoadTexture(std::string image) {
-    //tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile(ResourcePath("container.jpg"));
     tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile(ResourcePath(image));
     //bmp.flipVertically();
     gTexture = new tdogl::Texture(bmp);
@@ -139,17 +134,6 @@ static void Render() {
     
     // bind the program (the shaders)
     gProgram->use();
-    
-    // BEGIN update
-    // Pass transformation matrix to the fragment shader
-    /*
-    glm::mat4 trans;
-    trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
-    trans = glm::rotate(trans, (GLfloat)glfwGetTime() * 50.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-    gProgram->setUniform("transform", trans, GL_FALSE);
-    */
-    // END update
-    
     
     // bind the texture and set the "tex" uniform in the fragment shader
     glActiveTexture(GL_TEXTURE0);
