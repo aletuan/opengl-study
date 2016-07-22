@@ -121,12 +121,23 @@ static void Render() {
     
     // bind the program (the shaders)
     gProgram->use();
-        
+    
+    // BEGIN update
+    // Pass transformation matrix to the fragment shader
+    /*
+    glm::mat4 trans;
+    trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
+    trans = glm::rotate(trans, (GLfloat)glfwGetTime() * 50.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+    gProgram->setUniform("transform", trans, GL_FALSE);
+    */
+    // END update
+    
+    
     // bind the texture and set the "tex" uniform in the fragment shader
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, gTexture->object());
     gProgram->setUniform("ourTexture1", 0); //set to 0 because the texture is bound to GL_TEXTURE0
-
+    
     // bind the VAO (the triangle)
     glBindVertexArray(gVAO);
     
