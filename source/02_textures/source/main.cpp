@@ -40,6 +40,10 @@
 // constants
 const glm::vec2 SCREEN_SIZE(800, 600);
 
+// Function prototypes
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
+
+
 // globals
 GLFWwindow* gWindow = NULL;
 tdogl::Texture* gTexture = NULL;
@@ -52,6 +56,11 @@ GLuint gVBO = 0;
 glm::mat4 gModel;
 glm::mat4 gView;
 glm::mat4 gProjection;
+
+// define global position and direction for camera sorrounding
+glm::vec3 gCameraPos;
+glm::vec3 gCameraFront;
+glm::vec3 gCameraUp;
 
 glm::vec3 gCubePositions[] = {
     glm::vec3( 0.0f,  0.0f,  0.0f),
@@ -180,11 +189,12 @@ static void Render() {
     
     // define view matrix to control camera view
     // declare camera position
-    glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+    //glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
     // declare camera direction
-    glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-    glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
+    //glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+    //glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
     // up and right
+    /*
     glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
     glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
     glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
@@ -195,11 +205,19 @@ static void Render() {
     GLfloat camZ = cos(glfwGetTime()) * radius;
     
     view = glm::lookAt(glm::vec3(camX, 0.0, camZ), glm::vec3(0.0, 0.0, 0.0),
-                       glm::vec3(0.0, 1.0, 0.0));    
+                       glm::vec3(0.0, 1.0, 0.0));
+    */
+    
+    gCameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+    gCameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+    gCameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+    
+    gView = glm::lookAt(gCameraPos, gCameraPos + gCameraFront, gCameraUp);
+    
     
     // send the transform matrix to the vertex sharder
     gProgram->setUniform("model", gModel, GL_FALSE);
-    gProgram->setUniform("view", view, GL_FALSE);
+    gProgram->setUniform("view", gView, GL_FALSE);
     gProgram->setUniform("projection", gProjection, GL_FALSE);
     
     
@@ -250,6 +268,9 @@ void AppMain() {
     // GLFW settings
     glfwMakeContextCurrent(gWindow);
     
+    // Register callback function for keyboard
+    glfwSetKeyCallback(gWindow, key_callback);
+    
     // initialise GLEW
     glewExperimental = GL_TRUE; //stops glew crashing on OSX :-/
     if(glewInit() != GLEW_OK)
@@ -291,7 +312,6 @@ void AppMain() {
     glfwTerminate();
 }
 
-
 int main(int argc, char *argv[]) {
     try {
         AppMain();
@@ -303,4 +323,11 @@ int main(int argc, char *argv[]) {
     }
 
     return EXIT_SUCCESS;
+}
+
+// Is called whenever a key is pressed/released via GLFW
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
+{
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, GL_TRUE);
 }
