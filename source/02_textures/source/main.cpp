@@ -177,10 +177,31 @@ static void Render() {
     glBindTexture(GL_TEXTURE_2D, gTexture->object());
     gProgram->setUniform("ourTexture1", 0); //set to 0 because the texture is bound to GL_TEXTURE0
     
+    
+    // define view matrix to control camera view
+    // declare camera position
+    glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+    // declare camera direction
+    glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
+    // up and right
+    glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+    glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
+    glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
+    glm::mat4 view;
+    
+    GLfloat radius = 10.0f;
+    GLfloat camX = sin(glfwGetTime()) * radius;
+    GLfloat camZ = cos(glfwGetTime()) * radius;
+    
+    view = glm::lookAt(glm::vec3(camX, 0.0, camZ), glm::vec3(0.0, 0.0, 0.0),
+                       glm::vec3(0.0, 1.0, 0.0));    
+    
     // send the transform matrix to the vertex sharder
     gProgram->setUniform("model", gModel, GL_FALSE);
-    gProgram->setUniform("view", gView, GL_FALSE);
+    gProgram->setUniform("view", view, GL_FALSE);
     gProgram->setUniform("projection", gProjection, GL_FALSE);
+    
     
     // draw container
     glBindVertexArray(gVAO);
@@ -235,10 +256,10 @@ void AppMain() {
         throw std::runtime_error("glewInit failed");
 
     // print out some info about the graphics drivers
-    std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
-    std::cout << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
-    std::cout << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
-    std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
+    std::cout << "OpenGL version:   " << glGetString(GL_VERSION) << std::endl;
+    std::cout << "GLSL version:     " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
+    std::cout << "Vendor:           " << glGetString(GL_VENDOR) << std::endl;
+    std::cout << "Renderer:         " << glGetString(GL_RENDERER) << std::endl;
 
     // make sure OpenGL version 3.2 API is available
     if(!GLEW_VERSION_3_2)
