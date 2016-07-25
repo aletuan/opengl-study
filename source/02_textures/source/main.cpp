@@ -43,6 +43,8 @@ const glm::vec2 SCREEN_SIZE(800, 600);
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
+// Movement control
+void do_movement();
 
 // globals
 GLFWwindow* gWindow = NULL;
@@ -58,9 +60,10 @@ glm::mat4 gView;
 glm::mat4 gProjection;
 
 // define global position and direction for camera sorrounding
-glm::vec3 gCameraPos;
-glm::vec3 gCameraFront;
-glm::vec3 gCameraUp;
+glm::vec3 gCameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+glm::vec3 gCameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 gCameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+bool keys[1024];
 
 glm::vec3 gCubePositions[] = {
     glm::vec3( 0.0f,  0.0f,  0.0f),
@@ -208,10 +211,6 @@ static void Render() {
                        glm::vec3(0.0, 1.0, 0.0));
     */
     
-    gCameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-    gCameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-    gCameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-    
     gView = glm::lookAt(gCameraPos, gCameraPos + gCameraFront, gCameraUp);
     
     
@@ -304,7 +303,7 @@ void AppMain() {
         // process pending events
         glfwPollEvents();
         
-        // draw one frame
+        do_movement();
         Render();
     }
 
@@ -330,4 +329,27 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
+    if (key >= 0 && key < 1024)
+    {
+        if (action == GLFW_PRESS)
+            keys[key] = true;
+        else if (action == GLFW_RELEASE)
+            keys[key] = false;
+    }
+}
+
+void do_movement() {
+
+    // Camera controls
+    GLfloat cameraSpeed = 0.05f;
+    if (keys[GLFW_KEY_W])
+        gCameraPos += cameraSpeed * gCameraFront;
+    if (keys[GLFW_KEY_S])
+        gCameraPos -= cameraSpeed * gCameraFront;
+    if (keys[GLFW_KEY_A])
+        gCameraPos -= glm::normalize(glm::cross(gCameraFront, gCameraUp)) * cameraSpeed;
+    if (keys[GLFW_KEY_D])
+        gCameraPos += glm::normalize(glm::cross(gCameraFront, gCameraUp)) * cameraSpeed;
+
+    
 }
