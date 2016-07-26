@@ -184,15 +184,8 @@ static void Render() {
     
     // bind the program (the shaders)
     gLightingShader->use();
-    
-    // bind the texture and set the "tex" uniform in the fragment shader
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, gTexture->object());
-    //gProgram->setUniform("ourTexture1", 0); //set to 0 because the texture is bound to GL_TEXTURE0
-    
     gLightingShader->setUniform("objectColor", 1.0f, 0.5f, 0.31f);
     gLightingShader->setUniform("lightColor", 1.0f, 0.5f, 1.0f);
-    
     gView = glm::lookAt(gCameraPos, gCameraPos + gCameraFront, gCameraUp);
     
     // send the transform matrix to the vertex sharder
@@ -207,7 +200,6 @@ static void Render() {
     glDrawArrays(GL_TRIANGLES, 0, 36);    
     glBindVertexArray(0);
     
-    glBindTexture(GL_TEXTURE_2D, 0);
     
     // unbind the VAO, the program and the texture
     gLightingShader->stopUsing();
