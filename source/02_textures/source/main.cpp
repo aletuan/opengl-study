@@ -49,7 +49,8 @@ void do_movement();
 // globals
 GLFWwindow* gWindow = NULL;
 tdogl::Texture* gTexture = NULL;
-tdogl::Program* gProgram = NULL;
+tdogl::Program* gLightingShader = NULL;
+tdogl::Program* gLambShader = NULL;
 GLuint gVAO = 0;
 GLuint gVBO = 0;
 //GLuint gEBO = 0;
@@ -80,10 +81,14 @@ glm::vec3 gCubePositions[] = {
 
 // loads the vertex shader and fragment shader, and links them to make the global gProgram
 static void LoadShaders() {
-    std::vector<tdogl::Shader> shaders;
-    shaders.push_back(tdogl::Shader::shaderFromFile(ResourcePath("vertex-shader.txt"), GL_VERTEX_SHADER));
-    shaders.push_back(tdogl::Shader::shaderFromFile(ResourcePath("fragment-shader.txt"), GL_FRAGMENT_SHADER));
-    gProgram = new tdogl::Program(shaders);
+    std::vector<tdogl::Shader> lightShaders;
+    std::vector<tdogl::Shader> lampShader;
+    lightShaders.push_back(tdogl::Shader::shaderFromFile(ResourcePath("lighting.vs"), GL_VERTEX_SHADER));
+    lightShaders.push_back(tdogl::Shader::shaderFromFile(ResourcePath("lighting.frag"), GL_FRAGMENT_SHADER));
+    gLightingShader = new tdogl::Program(lightShaders);
+    lampShader.push_back(tdogl::Shader::shaderFromFile(ResourcePath("lighting.vs"), GL_VERTEX_SHADER));
+    lampShader.push_back(tdogl::Shader::shaderFromFile(ResourcePath("lighting.frag"), GL_FRAGMENT_SHADER));
+    gLambShader = new tdogl::Program(lampShader);
 }
 
 
@@ -182,19 +187,22 @@ static void Render() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     // bind the program (the shaders)
-    gProgram->use();
+    gLightingShader->use();
     
     // bind the texture and set the "tex" uniform in the fragment shader
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, gTexture->object());
     //gProgram->setUniform("ourTexture1", 0); //set to 0 because the texture is bound to GL_TEXTURE0
     
+    gLightingShader->setUniform("objectColor", 1.0f, 0.5f, 0.31f);
+    gLightingShader->setUniform("lightColor", 1.0f, 1.0f, 1.0f);
+    
     gView = glm::lookAt(gCameraPos, gCameraPos + gCameraFront, gCameraUp);
     
     // send the transform matrix to the vertex sharder
-    gProgram->setUniform("model", gModel, GL_FALSE);
-    gProgram->setUniform("view", gView, GL_FALSE);
-    gProgram->setUniform("projection", gProjection, GL_FALSE);    
+    gLightingShader->setUniform("model", gModel, GL_FALSE);
+    gLightingShader->setUniform("view", gView, GL_FALSE);
+    gLightingShader->setUniform("projection", gProjection, GL_FALSE);
     
     // draw container
     glBindVertexArray(gVAO);
@@ -203,7 +211,7 @@ static void Render() {
         model = glm::translate(model, gCubePositions[i]);
         GLfloat angle = 20.0f * i;
         model = glm::rotate(model, angle, glm::vec3(1.0f, 0.3f, 0.5f));
-        gProgram->setUniform("model", model, GL_FALSE);
+        gLightingShader->setUniform("model", model, GL_FALSE);
         glDrawArrays(GL_TRIANGLES, 0, 36);
     }
     
@@ -213,7 +221,7 @@ static void Render() {
     glBindTexture(GL_TEXTURE_2D, 0);
     
     // unbind the VAO, the program and the texture
-    gProgram->stopUsing();
+    gLightingShader->stopUsing();
     
     // swap the display buffers (displays what was just drawn)
     glfwSwapBuffers(gWindow);

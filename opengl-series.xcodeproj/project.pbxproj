@@ -22,9 +22,9 @@
 		E2639AFC190D16FF00B6251A /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2639AFB190D16FF00B6251A /* IOKit.framework */; };
 		E2639B00190D174200B6251A /* fragment-shader.txt in Resources */ = {isa = PBXBuildFile; fileRef = E2639AFE190D174200B6251A /* fragment-shader.txt */; };
 		E2639B08190D174200B6251A /* vertex-shader.txt in Resources */ = {isa = PBXBuildFile; fileRef = E2639AFF190D174200B6251A /* vertex-shader.txt */; };
-		E2639B20190D179B00B6251A /* fragment-shader.txt in Resources */ = {isa = PBXBuildFile; fileRef = E2639B12190D179B00B6251A /* fragment-shader.txt */; };
+		E2639B20190D179B00B6251A /* lighting.frag in Resources */ = {isa = PBXBuildFile; fileRef = E2639B12190D179B00B6251A /* lighting.frag */; };
 		E2639B21190D179B00B6251A /* hazard.png in Resources */ = {isa = PBXBuildFile; fileRef = E2639B13190D179B00B6251A /* hazard.png */; };
-		E2639B22190D179B00B6251A /* vertex-shader.txt in Resources */ = {isa = PBXBuildFile; fileRef = E2639B14190D179B00B6251A /* vertex-shader.txt */; };
+		E2639B22190D179B00B6251A /* lighting.vs in Resources */ = {isa = PBXBuildFile; fileRef = E2639B14190D179B00B6251A /* lighting.vs */; };
 		E2639B23190D179B00B6251A /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2639B16190D179B00B6251A /* main.cpp */; };
 		E2639B24190D179B00B6251A /* Bitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2639B18190D179B00B6251A /* Bitmap.cpp */; };
 		E2639B25190D179B00B6251A /* Program.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2639B1A190D179B00B6251A /* Program.cpp */; };
@@ -131,6 +131,8 @@
 		E29C2AE119FCA23200A6FCD2 /* platform_osx.mm in Sources */ = {isa = PBXBuildFile; fileRef = E29C2AC819FCA1A100A6FCD2 /* platform_osx.mm */; };
 		FA59FCF41D3F7C3C006C61FA /* container.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FA59FCF31D3F7C3C006C61FA /* container.jpg */; };
 		FA59FCF51D3F7C3C006C61FA /* container.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FA59FCF31D3F7C3C006C61FA /* container.jpg */; };
+		FA88CB9F1D471F85002552FE /* lamp.vs in Resources */ = {isa = PBXBuildFile; fileRef = FA88CB9E1D471F85002552FE /* lamp.vs */; };
+		FA88CBA11D471F97002552FE /* lamp.frag in Resources */ = {isa = PBXBuildFile; fileRef = FA88CBA01D471F97002552FE /* lamp.frag */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -152,9 +154,9 @@
 		E2639AFB190D16FF00B6251A /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		E2639AFE190D174200B6251A /* fragment-shader.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "fragment-shader.txt"; sourceTree = "<group>"; };
 		E2639AFF190D174200B6251A /* vertex-shader.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "vertex-shader.txt"; sourceTree = "<group>"; };
-		E2639B12190D179B00B6251A /* fragment-shader.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "fragment-shader.txt"; sourceTree = "<group>"; };
+		E2639B12190D179B00B6251A /* lighting.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = lighting.frag; sourceTree = "<group>"; };
 		E2639B13190D179B00B6251A /* hazard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hazard.png; sourceTree = "<group>"; };
-		E2639B14190D179B00B6251A /* vertex-shader.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "vertex-shader.txt"; sourceTree = "<group>"; };
+		E2639B14190D179B00B6251A /* lighting.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = lighting.vs; sourceTree = "<group>"; };
 		E2639B16190D179B00B6251A /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		E2639B18190D179B00B6251A /* Bitmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Bitmap.cpp; sourceTree = "<group>"; };
 		E2639B19190D179B00B6251A /* Bitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bitmap.h; sourceTree = "<group>"; };
@@ -252,6 +254,8 @@
 		E29C2AC819FCA1A100A6FCD2 /* platform_osx.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = platform_osx.mm; path = platforms/osx/platform_osx.mm; sourceTree = "<group>"; };
 		E29C2AC919FCA1C400A6FCD2 /* glew.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = glew.c; path = source/common/thirdparty/glew/src/glew.c; sourceTree = "<group>"; };
 		FA59FCF31D3F7C3C006C61FA /* container.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = container.jpg; sourceTree = "<group>"; };
+		FA88CB9E1D471F85002552FE /* lamp.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = lamp.vs; sourceTree = "<group>"; };
+		FA88CBA01D471F97002552FE /* lamp.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = lamp.frag; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -430,9 +434,11 @@
 			isa = PBXGroup;
 			children = (
 				FA59FCF31D3F7C3C006C61FA /* container.jpg */,
-				E2639B12190D179B00B6251A /* fragment-shader.txt */,
+				E2639B12190D179B00B6251A /* lighting.frag */,
 				E2639B13190D179B00B6251A /* hazard.png */,
-				E2639B14190D179B00B6251A /* vertex-shader.txt */,
+				E2639B14190D179B00B6251A /* lighting.vs */,
+				FA88CB9E1D471F85002552FE /* lamp.vs */,
+				FA88CBA01D471F97002552FE /* lamp.frag */,
 			);
 			path = resources;
 			sourceTree = "<group>";
@@ -927,6 +933,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA88CBA11D471F97002552FE /* lamp.frag in Resources */,
+				FA88CB9F1D471F85002552FE /* lamp.vs in Resources */,
 				E2639B08190D174200B6251A /* vertex-shader.txt in Resources */,
 				FA59FCF41D3F7C3C006C61FA /* container.jpg in Resources */,
 				E2639B00190D174200B6251A /* fragment-shader.txt in Resources */,
@@ -937,8 +945,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E2639B22190D179B00B6251A /* vertex-shader.txt in Resources */,
-				E2639B20190D179B00B6251A /* fragment-shader.txt in Resources */,
+				E2639B22190D179B00B6251A /* lighting.vs in Resources */,
+				E2639B20190D179B00B6251A /* lighting.frag in Resources */,
 				E2639B21190D179B00B6251A /* hazard.png in Resources */,
 				FA59FCF51D3F7C3C006C61FA /* container.jpg in Resources */,
 			);
