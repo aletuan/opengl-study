@@ -179,11 +179,7 @@ static void LoadTexture(std::string image) {
 // draws a single frame
 static void Render() {
     // clear everything
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-    
-    // need to enable deepth testing
-    glEnable(GL_DEPTH_TEST);
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     // bind the program (the shaders)
@@ -195,7 +191,7 @@ static void Render() {
     //gProgram->setUniform("ourTexture1", 0); //set to 0 because the texture is bound to GL_TEXTURE0
     
     gLightingShader->setUniform("objectColor", 1.0f, 0.5f, 0.31f);
-    gLightingShader->setUniform("lightColor", 1.0f, 1.0f, 1.0f);
+    gLightingShader->setUniform("lightColor", 1.0f, 0.5f, 1.0f);
     
     gView = glm::lookAt(gCameraPos, gCameraPos + gCameraFront, gCameraUp);
     
@@ -206,17 +202,10 @@ static void Render() {
     
     // draw container
     glBindVertexArray(gVAO);
-    for (int i = 0; i < 10; i++) {
-        glm::mat4 model;
-        model = glm::translate(model, gCubePositions[i]);
-        GLfloat angle = 20.0f * i;
-        model = glm::rotate(model, angle, glm::vec3(1.0f, 0.3f, 0.5f));
-        gLightingShader->setUniform("model", model, GL_FALSE);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-    }
-    
+    glm::mat4 model;
+    gLightingShader->setUniform("model", model, GL_FALSE);
+    glDrawArrays(GL_TRIANGLES, 0, 36);    
     glBindVertexArray(0);
-    
     
     glBindTexture(GL_TEXTURE_2D, 0);
     
