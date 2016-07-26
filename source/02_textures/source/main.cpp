@@ -68,19 +68,6 @@ glm::vec3 gCameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 gCameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 bool keys[1024];
 
-glm::vec3 gCubePositions[] = {
-    glm::vec3( 0.0f,  0.0f,  0.0f),
-    glm::vec3( 2.0f,  5.0f, -15.0f),
-    glm::vec3(-1.5f, -2.2f, -2.5f),
-    glm::vec3(-3.8f, -2.0f, -12.3f),
-    glm::vec3( 2.4f, -0.4f, -3.5f),
-    glm::vec3(-1.7f,  3.0f, -7.5f),
-    glm::vec3( 1.3f, -2.0f, -2.5f),
-    glm::vec3( 1.5f,  2.0f, -2.5f),
-    glm::vec3( 1.5f,  0.2f, -1.5f),
-    glm::vec3(-1.3f,  1.0f, -1.5f)
-};
-
 // loads the vertex shader and fragment shader, and links them to make the global gProgram
 static void LoadShaders() {
     std::vector<tdogl::Shader> lightShaders;
@@ -98,47 +85,47 @@ static void LoadShaders() {
 static void LoadRectangle() {   
     
     GLfloat vertices[] = {
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-        0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,
+        0.5f,  -0.5f, -0.5f,
+        0.5f,   0.5f, -0.5f,
+        0.5f,   0.5f, -0.5f,
+       -0.5f,   0.5f, -0.5f,
+       -0.5f,  -0.5f, -0.5f,
         
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-        0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-        0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+       -0.5f,  -0.5f,  0.5f,
+        0.5f,  -0.5f,  0.5f,
+        0.5f,   0.5f,  0.5f,
+        0.5f,   0.5f,  0.5f,
+       -0.5f,   0.5f,  0.5f,
+       -0.5f,  -0.5f,  0.5f,
         
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+       -0.5f,   0.5f,  0.5f,
+       -0.5f,   0.5f, -0.5f,
+       -0.5f,  -0.5f, -0.5f,
+       -0.5f,  -0.5f, -0.5f,
+       -0.5f,  -0.5f,  0.5f,
+       -0.5f,   0.5f,  0.5f,
         
-        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        0.5f,   0.5f,  0.5f,
+        0.5f,   0.5f, -0.5f,
+        0.5f,  -0.5f, -0.5f,
+        0.5f,  -0.5f, -0.5f,
+        0.5f,  -0.5f,  0.5f,
+        0.5f,   0.5f,  0.5f,
         
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+       -0.5f,  -0.5f, -0.5f,
+        0.5f,  -0.5f, -0.5f,
+        0.5f,  -0.5f,  0.5f,
+        0.5f,  -0.5f,  0.5f,
+       -0.5f,  -0.5f,  0.5f,
+       -0.5f,  -0.5f, -0.5f,
         
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+       -0.5f,  0.5f, -0.5f,
+        0.5f,  0.5f, -0.5f,
+        0.5f,  0.5f,  0.5f,
+        0.5f,  0.5f,  0.5f,
+       -0.5f,  0.5f,  0.5f,
+       -0.5f,  0.5f, -0.5f,
     };
     
     // define model matrix to transform all object's vertices to global world space
@@ -158,13 +145,9 @@ static void LoadRectangle() {
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
     
     // Link vertex attribute for position
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
     glEnableVertexAttribArray(0);
     
-    // Link vertex attribute for color
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-    glEnableVertexAttribArray(2);
-
     // unbind the VAO
     glBindVertexArray(0);
 }
