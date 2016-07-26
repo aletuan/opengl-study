@@ -187,38 +187,14 @@ static void Render() {
     // bind the texture and set the "tex" uniform in the fragment shader
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, gTexture->object());
-    gProgram->setUniform("ourTexture1", 0); //set to 0 because the texture is bound to GL_TEXTURE0
-    
-    
-    // define view matrix to control camera view
-    // declare camera position
-    //glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-    // declare camera direction
-    //glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-    //glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
-    // up and right
-    /*
-    glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-    glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
-    glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
-    glm::mat4 view;
-    
-    GLfloat radius = 10.0f;
-    GLfloat camX = sin(glfwGetTime()) * radius;
-    GLfloat camZ = cos(glfwGetTime()) * radius;
-    
-    view = glm::lookAt(glm::vec3(camX, 0.0, camZ), glm::vec3(0.0, 0.0, 0.0),
-                       glm::vec3(0.0, 1.0, 0.0));
-    */
+    //gProgram->setUniform("ourTexture1", 0); //set to 0 because the texture is bound to GL_TEXTURE0
     
     gView = glm::lookAt(gCameraPos, gCameraPos + gCameraFront, gCameraUp);
-    
     
     // send the transform matrix to the vertex sharder
     gProgram->setUniform("model", gModel, GL_FALSE);
     gProgram->setUniform("view", gView, GL_FALSE);
-    gProgram->setUniform("projection", gProjection, GL_FALSE);
-    
+    gProgram->setUniform("projection", gProjection, GL_FALSE);    
     
     // draw container
     glBindVertexArray(gVAO);
