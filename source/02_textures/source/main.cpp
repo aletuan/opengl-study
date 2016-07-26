@@ -53,7 +53,9 @@ tdogl::Program* gLightingShader = NULL;
 tdogl::Program* gLambShader = NULL;
 GLuint gVAO = 0;
 GLuint gVBO = 0;
-//GLuint gEBO = 0;
+
+// define lighting position
+glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 // move transform matrix to global since it should define in load function and replay in render iteration
 glm::mat4 gModel;
@@ -179,13 +181,15 @@ static void LoadTexture(std::string image) {
 // draws a single frame
 static void Render() {
     // clear everything
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    glClearColor(0.1f, 0.1f, 0.2f, 2.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     // bind the program (the shaders)
     gLightingShader->use();
     gLightingShader->setUniform("objectColor", 1.0f, 0.5f, 0.31f);
     gLightingShader->setUniform("lightColor", 1.0f, 0.5f, 1.0f);
+    
+    //suspect view not display
     gView = glm::lookAt(gCameraPos, gCameraPos + gCameraFront, gCameraUp);
     
     // send the transform matrix to the vertex sharder
@@ -197,12 +201,27 @@ static void Render() {
     glBindVertexArray(gVAO);
     glm::mat4 model;
     gLightingShader->setUniform("model", model, GL_FALSE);
-    glDrawArrays(GL_TRIANGLES, 0, 36);    
+    glDrawArrays(GL_TRIANGLES, 0, 36);
     glBindVertexArray(0);
-    
     
     // unbind the VAO, the program and the texture
     gLightingShader->stopUsing();
+    
+    // create model for the second lamb cube
+    model = glm::mat4();
+    model = glm::translate(model, lightPos);
+    model = glm::scale(model, glm::vec3(0.5f));
+    
+    // using lambd shader
+    gLambShader->use();
+    gLambShader->setUniform("model", model, GL_FALSE);
+    gLambShader->setUniform("view", gView, GL_FALSE);
+    gLambShader ->setUniform("projection", gProjection, GL_FALSE);
+    glBindVertexArray(gVAO);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glBindVertexArray(0);
+    
+    gLambShader->stopUsing();
     
     // swap the display buffers (displays what was just drawn)
     glfwSwapBuffers(gWindow);
